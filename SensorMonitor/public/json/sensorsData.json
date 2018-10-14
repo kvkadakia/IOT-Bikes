@@ -1,0 +1,5 @@
+{
+  "light": "77",
+  "temperature": "56.39",
+  "alert": "Beep is due to temperature difference greater than 10F"
+}

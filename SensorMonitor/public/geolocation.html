@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Quick Start - Leaflet</title>
+
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico"/>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"
+          integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+          crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"
+            integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA=="
+            crossorigin=""></script>
+    <script type="application/javascript" src="js/jquery.min.js"></script>
+
+
+</head>
+<body>
+
+
+<div id="mapid" style="width: 600px; height: 400px;"></div>
+<script>
+    function getParams() {
+        var idx = document.URL.indexOf('?');
+        params = {};
+        if (idx != -1) {
+            var pairs = document.URL.substring(idx + 1, document.URL.length).split('&');
+            for (var i = 0; i < pairs.length; i++) {
+                nameVal = pairs[i].split('=');
+                params[nameVal[0]] = nameVal[1];
+            }
+        }
+        var url = "http://localhost:3001/json/" + unescape(params["deviceId"]) + ".json";
+        let loc = "";
+        $.get(url, function (data) {
+            console.log("Get call successful" + JSON.stringify(data));
+            loc = data;
+
+            newCoordinates = [loc.newLatitude, loc.newLongitude];
+            oldCoordinates = [loc.oldLatitude, loc.oldLongitude];
+            //oldCoordinates = [41.86,-87.61];
+            var mymap = L.map('mapid').setView(newCoordinates, 13);
+
+            L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+                maxZoom: 18,
+                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+                    '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+                    'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                id: 'mapbox.streets'
+            }).addTo(mymap);
+
+            L.circle(oldCoordinates, {
+                color: 'green',
+                fillColor: 'green',
+                fillOpacity: 0.5,
+                radius: 1000
+            }).addTo(mymap);
+            L.marker(oldCoordinates).addTo(mymap);
+            L.marker(newCoordinates).addTo(mymap);
+        }).fail(function (err) {
+            console.log("Get call failed" + err);
+        });
+
+
+    }
+
+    function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+        var R = 6371; // Radius of the earth in km
+        var dLat = deg2rad(lat2 - lat1);  // deg2rad below
+        var dLon = deg2rad(lon2 - lon1);
+        var a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2)
+        ;
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        var d = R * c; // Distance in km
+        return d;
+    }
+
+    function deg2rad(deg) {
+        return deg * (Math.PI / 180)
+    }
+
+    var idx = document.URL.indexOf('?');
+    getParams();
+
+
+</script>
+
+
+</body>
+</html>

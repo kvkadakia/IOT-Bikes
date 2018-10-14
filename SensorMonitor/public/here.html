@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.0/mapsjs-ui.css"/>
+    <style>
+
+        .map {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+    </style>
+    <script type="text/javascript" charset="UTF-8" src="https://js.api.here.com/v3/3.0/mapsjs-core.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="https://js.api.here.com/v3/3.0/mapsjs-service.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="https://js.api.here.com/v3/3.0/mapsjs-ui.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="https://js.api.here.com/v3/3.0/mapsjs-mapevents.js"></script>
+    <script type="application/javascript" src="js/jquery.min.js"></script>
+    <script>
+
+
+        function loadJS() {
+            var idx = document.URL.indexOf('?');
+            params = {};
+            if (idx != -1) {
+                var pairs = document.URL.substring(idx + 1, document.URL.length).split('&');
+                for (var i = 0; i < pairs.length; i++) {
+                    nameVal = pairs[i].split('=');
+                    params[nameVal[0]] = nameVal[1];
+                }
+            }
+            var url = "http://localhost:3001/json/" + unescape(params["deviceId"]) + ".json";
+            let loc = "";
+            $.get(url, function (data) {
+                console.log("Get call successful" + JSON.stringify(data));
+                loc = data;
+                var platform = new H.service.Platform({
+                    app_id: 'QTEN8cercVlT4ycHj6Hq', // // <-- ENTER YOUR APP ID HERE
+                    app_code: '84NZPcLa7aTSYPbM6tJhmQ', // <-- ENTER YOUR APP CODE HERE
+                });
+
+                var defaultLayers = platform.createDefaultLayers();
+                var mapContainer = document.getElementById('map-container');
+
+                var newCoordinates = {
+                    lat: loc.newLatitude, // HERE HQ in Berlin, Germany
+                    lng: loc.newLongitude
+                };
+
+                var oldCoordinates = {
+                    lat: loc.oldLatitude, // HERE HQ in Berlin, Germany
+                    lng: loc.oldLongitude
+                };
+
+                var mapOptions = {
+                    center: newCoordinates,
+                    zoom: 14
+                }
+
+                var map = new H.Map(
+                    mapContainer,
+                    defaultLayers.normal.map,
+                    mapOptions);
+
+                var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+
+                var marker = new H.map.Marker(newCoordinates);
+                var marker2 = new H.map.Marker(oldCoordinates);
+                var circle = new H.map.Circle(oldCoordinates, 1000);
+                map.addObject(marker);
+                map.addObject(marker2);
+                map.addObject(circle);
+
+                window.addEventListener('resize', function () {
+                    map.getViewPort().resize();
+                });
+            });
+        }
+    </script>
+
+</head>
+
+
+<body onload="loadJS()">
+
+<div id="map-container" class="map"></div>
+</body>
+</html>

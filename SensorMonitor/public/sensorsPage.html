@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Device Sensors</title>
+    <script type="application/javascript" src="js/jquery.min.js"></script>
+    <script type="application/javascript" src="js/bootstrap.min.js"></script>
+    <script src="js/scripts.js"></script>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <script>function load() {
+
+        var table = $('#table');
+        var myData = $.get("http://localhost:3001/json/sensorsData.json", function (item) {
+            console.log("Get call successful" + JSON.stringify(item));
+
+            $('<tr>').html("<td>" + item.temperature + "</td><td>" + item.light + "</td>" + "<td>" + item.alert + "</td>").appendTo('#table');
+
+        })
+            .fail(function () {
+                console.log("Get call failed");
+            })
+            .always(function () {
+                console.log("Get call was made for devices");
+            });
+
+
+    }
+
+    window.onload = load();
+    </script>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="container">
+                <h2>
+                    Track My Devices
+                </h2>
+
+                <div class="container">
+                    <table id="table" class="table table-striped table-bordered table-hover table-condensed"
+                           data-height="460">
+                        <thead>
+                        <tr>
+                            <!--<th data-field="deviceId">Device ID</th>-->
+                            <th data-field="temperature">Temperature</th>
+                            <th data-field="light">Light</th>
+                            <th data-field="deviceAlert">Alert</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="container">
+        <div class="row">
+        <input type="button"></input>
+        </div>
+
+        </div>-->
+    </div>
+</div>
+
+
+</body>
+</html>

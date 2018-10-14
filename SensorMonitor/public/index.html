@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Real-Time Device Tracker</title>
+
+    <meta name="description" content="Source code generated using layoutit.com">
+    <meta name="author" content="LayoutIt!">
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <script type="application/javascript" src="js/jquery.min.js"></script>
+    <script type="application/javascript" src="js/bootstrap.min.js"></script>
+    <script src="js/scripts.js"></script>
+
+    <script type="application/javascript">
+        function load() {
+
+            var table = $('#table');
+            var myData = $.get("http://localhost:3001/devices", function (data) {
+                console.log("Get call successful" + JSON.stringify(data));
+                $.each(data, function (i, item) {
+                    $('<tr>').html("<td><b><a href=" + data[i].page + "?deviceId=" + data[i].deviceId + ">" + data[i].deviceId + "</a></td><td>" + data[i].deviceType + "</td><td>" + data[i].deviceStatus + "</b></td>").appendTo('#table');
+                });
+            })
+                .fail(function () {
+                    console.log("Get call failed");
+                })
+                .always(function () {
+                    console.log("Get call was made for devices");
+                });
+
+
+        }
+
+        window.onload = load();
+    </script>
+</head>
+<body style="background-color:#ebc2af;>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <br>
+            <br>
+            <div class="container">
+                <h2 style="font-size:50px">
+                    Track My Devices:
+                    <img src = 'vibration.png' height = "100">
+                    <img src = 'bulb.png' height = "120">
+                    <img src = 'location.png' height = "120">
+                </h2>
+
+                <br>
+                <br>
+                <br>
+                <br>
+                <div class="container">
+                    <table id="table" class="table table-striped table-bordered table-hover table-condensed"
+                           data-height="460" style = "border: 5px solid yellow">
+                        <thead>
+                        <tr>
+                            <th data-field="deviceId" style="font-size:20px">Device ID</th>
+                            <th data-field="deviceType" style="font-size:20px">Device Sensor Type</th>
+                            <th data-field="deviceStatus" style="font-size:20px">Device Status</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+
+                <!--<p>
+                    <a class="btn btn-primary btn-large" href="#">Learn more</a>
+                </p>-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="mapid"></div>
+
+
+</body>
+</html>
