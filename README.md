@@ -18,6 +18,7 @@ A Twilio API sends the SMS if the readings of the sensors goes beyond a threshol
 A Debian OS is mounted on the Dragonboard.
 A Node.js application receives the location data from a python API and sends it to Google Cloud Platform.
 The sensors on Arduino are present to detect any damages done to the box( mounted on bike and the dragonboard is present inside this box.
+![Architecture Diagram](https://github.com/harsh543/IoT-Bikes/blob/master/images/Arch.png "Architecture Diagram")
 
 # Challenges we ran into<br>
 The GPS sensor cannot be activated on the dragonboard because specific gps modules cannot be used on Debian version. Samsung gear s3 gps and bluetooth transfer issues.
