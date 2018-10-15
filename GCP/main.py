@@ -116,8 +116,8 @@ def updateDB():
 	if float(lat)<minLat or float(lat)>maxLat:
 		out_of_range = True
 		merchantAuth = apicontractsv1.merchantAuthenticationType()
-		merchantAuth.name = '5KP3u95bQpv'
-		merchantAuth.transactionKey = '4Ktq966gC55GAX7S'
+		merchantAuth.name = '4t8eNZ3F'
+		merchantAuth.transactionKey = '8PL4aPbeCj6334pH'
 
 		creditCard = apicontractsv1.creditCardType()
 		creditCard.cardNumber = "4111111111111111"
